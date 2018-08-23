@@ -1,0 +1,20 @@
+Project name:	example1
+Project type:				# BES INFO
+Versions:	3			# number of different versions
+Questions:	20
+INPUT FILES:
+questionlist:	example1-questionlist.csv
+mainlatex:	example1-main.tex
+replacements:	
+
+
+OUTPUT FILES:
+qnumber:	example1-qnumber.csv
+qcodes: 	example1-qcodes.csv
+qanswerorder:	example1-qanswerorder.csv
+qkey:   	example1-qkey.csv
+
+givenanswers:	example1-givenanswers.csv
+
+SUBSTITUTIONS
+substitution1:	example1-substitutions.csv

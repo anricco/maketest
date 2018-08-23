@@ -1,0 +1,78 @@
+\documentclass[11pt,a4paper]{article} 
+\pagestyle{empty}
+
+\usepackage{tikz}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+%            \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
+            \node[shape=circle,draw,inner sep=2pt] (char) {$\phantom{8}$};
+            \node[draw=none,fill=none] (char) {#1};}}
+            
+\newcommand*\squared[1]{\tikz[baseline=(char.base)]{
+            \node[shape=rectangle,draw,inner sep=3pt] (char) {$\phantom{A}$};
+            \node[draw=none,fill=none] (char) {#1};}}
+
+
+            
+\usepackage{enumitem}
+
+
+
+ \usepackage{amsfonts}
+ \usepackage{latexsym}
+ \usepackage{epsfig}
+ \usepackage{graphicx}
+ \usepackage{fancyhdr}
+ \usepackage{verbatim}
+ 
+ \usepackage{multicol}
+% \usepackage{flushend}
+% \usepackage{lipsum}
+
+ \usepackage{cancel}
+ 
+ \fancyhf{}
+ \renewcommand\headrule{}
+ 
+\usepackage[latin1]{inputenc}
+
+\title{Physics Test -- Version @ver@}
+\author{}
+\date{}
+
+\pagestyle{fancy}
+
+
+\begin{document}
+
+\maketitle
+
+
+\begin{enumerate}[label=\protect\circled{\arabic*}]
+
+@QUESTIONS@
+
+\end{enumerate}
+
+
+
+
+\vspace{.5cm}
+\begin{multicols}{2}
+	\noindent
+
+@FIGURES@
+
+%
+\end{multicols}
+
+
+
+\vspace{.5cm}
+
+@TABLES@
+
+
+
+\end{document}
+%
+
