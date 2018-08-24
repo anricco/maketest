@@ -5,8 +5,8 @@ Questions:	20
 INPUT FILES:
 questionlist:	example1-questionlist.csv
 mainlatex:	example1-main.tex
-replacements:	
-
+qfolder:	example1-questions
+replacements:
 
 OUTPUT FILES:
 qnumber:	example1-qnumber.csv

@@ -318,7 +318,7 @@ def makeLatexFile(latexOutputFileName, vNumber, transposedReorderedQuestionListM
 
     # print latexOutputFileString
 
-    latexOutputFile = open( mainpath + "/latex/" + latexOutputFileName, 'w' )
+    latexOutputFile = open( mainpath + "/output/latex/" + latexOutputFileName, 'w' )
     latexOutputFile.write(latexOutputFileString)    #.decode('latin1')
 
 
@@ -337,7 +337,7 @@ def makeVersionFiles(vNumber):
     questionNumberList, questionCodeList, questionTypeList, questionVersionNumberList, \
         questionFigureList, questionTableList, questionAnswerOrderList, questionAnswerOrderString, \
         questionKeyList = transposedReorderedQuestionListMatrix
-    
+
     # questionNumberList = transposedReorderedQuestionListMatrix[0]
     # questionCodeList = transposedReorderedQuestionListMatrix[1]
     # questionTypeList = transposedReorderedQuestionListMatrix[2]
@@ -388,16 +388,16 @@ def makeVersionFiles(vNumber):
 
     latexOutputFileName = projectName + "-" + `vNumber` + ".tex"
     makeLatexFile(latexOutputFileName, vNumber, transposedReorderedQuestionListMatrix)
-    latexToPdf(latexOutputFileName, mainpath+"/latex")
+    latexToPdf(latexOutputFileName, mainpath+"/output/latex")
     # the latex file could be deleted by latexToPdf after creating the pdf file (commented now)
-    # os.system("rm " + mainpath +  "/latex/" +  projectName + "-" + `vNumber` + ".tex")
+    # os.system("rm " + mainpath +  "/output/latex/" +  projectName + "-" + `vNumber` + ".tex")
 
 
     # USES pdfrw
-    testWriter.addpages(PdfReader(mainpath + "/latex/" +  projectName + "-" + `vNumber` + ".pdf").pages)
+    testWriter.addpages(PdfReader(mainpath + "/output/latex/" +  projectName + "-" + `vNumber` + ".pdf").pages)
 
     # all files in latex folder deleted after
-    # os.system("rm " + mainpath + "/latex/" +  projectName + "-" + `vNumber` + ".pdf")
+    # os.system("rm " + mainpath + "/output/latex/" +  projectName + "-" + `vNumber` + ".pdf")
 
 
 
@@ -405,7 +405,7 @@ def makeVersionFiles(vNumber):
 def main():
 
         #### COMMAND LINE OPTIONS ####
-    
+
     parser = argparse.ArgumentParser()
     # parser.parse_args()
     parser.add_argument("project", help="the project filename")
@@ -466,15 +466,19 @@ def main():
     global testWriter
     testWriter = PdfWriter()
 
-    # copying the figures and eventually other files in the /latex directory
-    # ADD: option to copy other files, like other figures
+    # creating the latex folder that will be deleted on exiting
+    if not os.path.exists(mainpath + "/output/latex/"):
+        os.makedirs(mainpath + "/output/latex/")
+
+    # copying the figures and eventually other files in the /output/latex directory
+    # TO ADD: option to copy other files, like other figures
     # shutil.copyfile( mainpath + "/input/buon-compito.pdf",
-    #                          mainpath + "/latex/buon-compito.pdf")
+    #                          mainpath + "/output/latex/buon-compito.pdf")
     for j in range(0,questionNumber):
         if os.path.exists( mainpath + "/questions/" + "q" + questionListMatrix[j][1] + "-fig.pdf" ):
             #print j+1
             shutil.copyfile( mainpath + "/questions/" + "q" + questionListMatrix[j][1] + "-fig.pdf" ,
-                             mainpath + "/latex/" + "q" + questionListMatrix[j][1] + "-fig.pdf")
+                             mainpath + "/output/latex/" + "q" + questionListMatrix[j][1] + "-fig.pdf")
 
         #shutil.copyfile(src, dst)
         #newQuestionString = makeQuestion(questionCodeList[j], int(questionTypeList[j]), questionAnswerOrderList[j])
@@ -492,12 +496,13 @@ def main():
     testWriter.write(projectName + ".pdf")
     os.chdir(mainpath)
 
-    os.system("rm " + mainpath + "/latex/*.*")
+    # os.system("rm " + mainpath + "/output/latex/*.*")
+    shutil.rmtree(mainpath + "/output/latex")
 
     qNumberFile.close()
     qCodeFile.close()
     qAnswerOrderFile.close()
     qKeyFile.close()
 
-    
+
 main()
