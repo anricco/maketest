@@ -401,23 +401,11 @@ def makeVersionFiles(vNumber):
 
 
 
-
-def main():
-
-        #### COMMAND LINE OPTIONS ####
-
-    parser = argparse.ArgumentParser()
-    # parser.parse_args()
-    parser.add_argument("project", help="the project filename")
-    args = parser.parse_args()
-    projectFileName = args.project
-    # pprint args.project
-    print "projectFileName: " + projectFileName + "\n"
+# it defines all the global variables associated to the project,
+# such as projectMatrix, projectName, projectType, versionNumber, etc.
+def readProject(projectFileName):
 
         #### LIST OF CONSTANTS ####
-
-    global mainpath
-    mainpath = os.getcwd()
 
     global projectMatrix
     projectMatrix = csvFileToMatrix(projectFileName, mainpath)
@@ -463,6 +451,24 @@ def main():
     #print qNumber
 
     #### END LIST OF CONSTANTS ####
+
+
+def main():
+
+    global mainpath
+    mainpath = os.getcwd()
+
+        #### COMMAND LINE OPTIONS ####
+    parser = argparse.ArgumentParser()
+    # parser.parse_args()
+    parser.add_argument("project", help="the project filename")
+    args = parser.parse_args()
+    projectFileName = args.project
+    # pprint args.project
+    print "projectFileName: " + projectFileName + "\n"
+
+    # readProject defines all the global variables associated to the project
+    readProject(projectFileName)
 
     global testWriter
     testWriter = PdfWriter()
