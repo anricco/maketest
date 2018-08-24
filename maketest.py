@@ -400,6 +400,27 @@ def makeVersionFiles(vNumber):
     # os.system("rm " + mainpath + "/output/latex/" +  projectName + "-" + `vNumber` + ".pdf")
 
 
+# it creates the latex folder that will be deleted on exiting
+def makeLatexFolder():
+
+    if not os.path.exists(mainpath + "/output/latex/"):
+        os.makedirs(mainpath + "/output/latex/")
+
+    # copying the figures and eventually other files in the /output/latex directory
+    # TO ADD: option to copy other files, like other figures
+    # shutil.copyfile( mainpath + "/input/buon-compito.pdf",
+    #                          mainpath + "/output/latex/buon-compito.pdf")
+    for j in range(0,questionNumber):
+        if os.path.exists( mainpath + "/input/" + questionFolderName + "/" + "q" + questionListMatrix[j][1] + "-fig.pdf" ):
+            #print j+1
+            shutil.copyfile( mainpath + "/input/" + questionFolderName + "/" + "q" + questionListMatrix[j][1] + "-fig.pdf" ,
+                             mainpath + "/output/latex/" + "q" + questionListMatrix[j][1] + "-fig.pdf")
+
+        #shutil.copyfile(src, dst)
+        #newQuestionString = makeQuestion(questionCodeList[j], int(questionTypeList[j]), questionAnswerOrderList[j])
+        #allQuestionString = allQuestionString + newQuestionString    #encode('latin1')
+
+
 
 # it defines all the global variables associated to the project,
 # such as projectMatrix, projectName, projectType, versionNumber, etc.
@@ -470,27 +491,11 @@ def main():
     # readProject defines all the global variables associated to the project
     readProject(projectFileName)
 
+    # creating the latex folder that will be deleted on exiting
+    makeLatexFolder()
+
     global testWriter
     testWriter = PdfWriter()
-
-    # creating the latex folder that will be deleted on exiting
-    if not os.path.exists(mainpath + "/output/latex/"):
-        os.makedirs(mainpath + "/output/latex/")
-
-    # copying the figures and eventually other files in the /output/latex directory
-    # TO ADD: option to copy other files, like other figures
-    # shutil.copyfile( mainpath + "/input/buon-compito.pdf",
-    #                          mainpath + "/output/latex/buon-compito.pdf")
-    for j in range(0,questionNumber):
-        if os.path.exists( mainpath + "/input/" + questionFolderName + "/" + "q" + questionListMatrix[j][1] + "-fig.pdf" ):
-            #print j+1
-            shutil.copyfile( mainpath + "/input/" + questionFolderName + "/" + "q" + questionListMatrix[j][1] + "-fig.pdf" ,
-                             mainpath + "/output/latex/" + "q" + questionListMatrix[j][1] + "-fig.pdf")
-
-        #shutil.copyfile(src, dst)
-        #newQuestionString = makeQuestion(questionCodeList[j], int(questionTypeList[j]), questionAnswerOrderList[j])
-        #allQuestionString = allQuestionString + newQuestionString    #encode('latin1')
-
 
     for vNumber in range(0,versionNumber+1):
         print "Now preparing version " + `vNumber` + " (of " + `versionNumber` + "+1)..."
