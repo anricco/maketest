@@ -184,7 +184,7 @@ def makeQuestion(questionCode, questionType, answerOrder, figureNumber, tableNum
         questionType = int(questionCode[6])
 
     questionString = r'\item' + "\n"
-    questionFile = open( mainpath + "/questions/" + "q" + questionCode + ".tex", 'r' )
+    questionFile = open( mainpath + "/input/" + questionFolderName + "/" + "q" + questionCode + ".tex", 'r' )
     questionString = questionString + questionFile.read() + "\n"   #.decode('latin1')
     questionFile.close()
 
@@ -196,7 +196,7 @@ def makeQuestion(questionCode, questionType, answerOrder, figureNumber, tableNum
             l = answerOrder[k-1]
             questionString = questionString + "\t\t"
             questionString = questionString + r'\item '
-            answerFile = open( mainpath + "/questions/" + "q" + questionCode + "a" + `l` + ".tex", 'r' )
+            answerFile = open( mainpath + "/input/" + questionFolderName + "/" + "q" + questionCode + "a" + `l` + ".tex", 'r' )
             questionString = questionString + answerFile.read()
             questionString = questionString + "\n"
         questionString = questionString + "\t"
@@ -246,7 +246,7 @@ def makeFigure(questionCode, figureNumber):
 # it takes a questionCode, identifying a question, and produces a questionString, a string containing the question.
 def makeTable(questionCode, tableNumber):
 
-    tableFile = open( mainpath + "/questions/" + "q" + questionCode + "-tab.tex", 'r' )
+    tableFile = open( mainpath + "/input/" + questionFolderName + "/" + "q" + questionCode + "-tab.tex", 'r' )
     tableString = tableFile.read() + "\n"
     tableFile.close()
 
@@ -426,16 +426,17 @@ def main():
     #matrixToCsvFile(projectMatrix, `sys.stdout`, "")
 
     # PROJECT NAME, TYPE AND TOTAL NUMBER OF VERSIONS
-    # (da separare e verificare anche questionNumber, confrontando con il numero di domande in questionListMatrix )
+    # TO DO: (da separare e verificare anche questionNumber, confrontando con il numero di domande in questionListMatrix )
     global projectName, projectType, versionNumber
     projectName = projectMatrix[0][1]
     projectType = projectMatrix[1][1]
     versionNumber = int(projectMatrix[2][1])
 
     # INPUT FILE NAMES
-    global questionListFileName, latexInputFileName
+    global questionListFileName, latexInputFileName, questionFolderName
     questionListFileName = projectMatrix[5][1]
     latexInputFileName = projectMatrix[6][1]
+    questionFolderName = projectMatrix[7][1]
 
     #OUTPUT FILE NAMES
     global qNumberFileName, qCodeFileName, qAnswerOrderFileName, qKeyFileName
@@ -475,9 +476,9 @@ def main():
     # shutil.copyfile( mainpath + "/input/buon-compito.pdf",
     #                          mainpath + "/output/latex/buon-compito.pdf")
     for j in range(0,questionNumber):
-        if os.path.exists( mainpath + "/questions/" + "q" + questionListMatrix[j][1] + "-fig.pdf" ):
+        if os.path.exists( mainpath + "/input/" + questionFolderName + "/" + "q" + questionListMatrix[j][1] + "-fig.pdf" ):
             #print j+1
-            shutil.copyfile( mainpath + "/questions/" + "q" + questionListMatrix[j][1] + "-fig.pdf" ,
+            shutil.copyfile( mainpath + "/input/" + questionFolderName + "/" + "q" + questionListMatrix[j][1] + "-fig.pdf" ,
                              mainpath + "/output/latex/" + "q" + questionListMatrix[j][1] + "-fig.pdf")
 
         #shutil.copyfile(src, dst)
@@ -496,7 +497,7 @@ def main():
     testWriter.write(projectName + ".pdf")
     os.chdir(mainpath)
 
-    # os.system("rm " + mainpath + "/output/latex/*.*")
+    # the latex directory is deleted on exiting
     shutil.rmtree(mainpath + "/output/latex")
 
     qNumberFile.close()
