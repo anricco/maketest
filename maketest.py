@@ -179,7 +179,7 @@ def reorderQuestionListMatrix(vNumber):
 
 
 # it takes a questionCode, identifying a question, and produces a questionString, a string containing the question.
-def makeQuestion(questionCode, questionType, answerOrder, figureNumber, tableNumber):
+def makeQuestion(questionCode, questionType, answerOrder, figureNumber, tableNumber, textNumber):
     if questionType == 0:
         questionType = int(questionCode[6])
 
@@ -211,10 +211,14 @@ def makeQuestion(questionCode, questionType, answerOrder, figureNumber, tableNum
         questionString = questionString + r'\emph{' + questionCode + r'}' + "\n\n"
 
     if not figureNumber == '':
-        questionString = questionString.replace('@FIGURA@', `figureNumber` )
+        questionString = questionString.replace('@FIGURE@', `figureNumber` )
 
     if not tableNumber == '':
-        questionString = questionString.replace('@TABELLA@', `tableNumber` )
+        questionString = questionString.replace('@TABLE@', `tableNumber` )
+
+    if not textNumber == '':
+        questionString = questionString.replace('@TEXT@', `textNumber` )
+
 
     return questionString
 
@@ -254,24 +258,29 @@ def makeTable(questionCode, tableNumber):
 
     return tableString
 
+# it takes a questionCode, identifying a question, and produces a questionString, a string containing the question.
+def makeText(questionCode, textNumber):
+
+    textFile = open( mainpath + "/input/" + questionFolderName + "/" + "q" + questionCode + "-text.tex", 'r' )
+    textString = textFile.read() + "\n"
+    textFile.close()
+
+    textString = textString.replace('@TEXT@', `textNumber` )
+
+    return textString
 
 
 def makeLatexFile(latexOutputFileName, vNumber, transposedReorderedQuestionListMatrix):
 
-    questionNumberList = transposedReorderedQuestionListMatrix[0]
-    questionCodeList = transposedReorderedQuestionListMatrix[1]
-    questionTypeList = transposedReorderedQuestionListMatrix[2]
-    questionVersionNumberList = transposedReorderedQuestionListMatrix[3]
-    questionFigureList = transposedReorderedQuestionListMatrix[4]
-    questionTableList = transposedReorderedQuestionListMatrix[5]
-    questionAnswerOrderList = transposedReorderedQuestionListMatrix[6]
-    questionAnswerOrderString = transposedReorderedQuestionListMatrix[7]
-    questionKeyList = transposedReorderedQuestionListMatrix[8]
+    questionNumberList, questionCodeList, questionTypeList, questionVersionNumberList, \
+        questionFigureList, questionTableList, questionTextList, \
+        questionAnswerOrderList, questionAnswerOrderString, questionKeyList = transposedReorderedQuestionListMatrix
 
     # qNumber = len(questionCodeList)
 
     # it creates a dictionary that to each figure associates its number
     # it creates a dictionary that to each table associates its number
+    # it creates a dictionary that to each text associates its number
     # it creates the strings of questions, figures and tables
     figureNumber = 0
     figureDictionary = {}
@@ -281,11 +290,16 @@ def makeLatexFile(latexOutputFileName, vNumber, transposedReorderedQuestionListM
     tableDictionary = {}
     tableDictionary['xxxxxxxxxxxx'] = ''
 
+    textNumber = 0
+    textDictionary = {}
+    textDictionary['xxxxxxxxxxxx'] = ''
+
+    # allTableString, allQuestionString, allFigureString contain LaTeX code to be added
+    # inside latexInputFile to create latexOutputFile
     allQuestionString = ""
     allFigureString = ""
     allTableString = ""
-    figureNumber = 0
-    tableNumber = 0
+    allTextString = ""
 
     for j in range(0,questionNumber):
         if not questionFigureList[j] == 'xxxxxxxxxxxx' and not questionFigureList[j] in figureDictionary:
@@ -304,8 +318,17 @@ def makeLatexFile(latexOutputFileName, vNumber, transposedReorderedQuestionListM
             newTableString = makeTable(questionTableList[j], tableNumber)
             allTableString = allTableString + newTableString
 
+        if not questionTextList[j] == 'xxxxxxxxxxxx' and not questionTextList[j] in textDictionary:
+            textNumber = textNumber + 1
+            #print tableNumber
+            #print questionTableList[j]
+            textDictionary[questionTextList[j]] = textNumber
+            newTextString = makeText(questionTextList[j], textNumber)
+            allTextString = allTextString + newTextString
+
         newQuestionString = makeQuestion(questionCodeList[j], int(questionTypeList[j]), questionAnswerOrderList[j],
-                                         figureDictionary[questionFigureList[j]], tableDictionary[questionTableList[j]] )
+                                         figureDictionary[questionFigureList[j]], tableDictionary[questionTableList[j]],
+                                         textDictionary[questionTextList[j]])
         allQuestionString = allQuestionString + newQuestionString    #encode('latin1')
     #print figureDictionary
     #print tableDictionary
@@ -313,7 +336,8 @@ def makeLatexFile(latexOutputFileName, vNumber, transposedReorderedQuestionListM
 
 
     replacementListMatrix = [["@ver@",`vNumber`],["@QUESTIONS@", allQuestionString],
-                             ["@FIGURES@", allFigureString],["@TABLES@", allTableString]]
+                             ["@FIGURES@", allFigureString],["@TABLES@", allTableString],
+                             ["@TEXTS@", allTextString]]
     latexOutputFileString = replaceTag(latexInputFileName, mainpath + "/input/", replacementListMatrix)
 
     # print latexOutputFileString
@@ -335,22 +359,10 @@ def makeVersionFiles(vNumber):
     # print transposedReorderedQuestionListMatrix
 
     questionNumberList, questionCodeList, questionTypeList, questionVersionNumberList, \
-        questionFigureList, questionTableList, questionAnswerOrderList, questionAnswerOrderString, \
-        questionKeyList = transposedReorderedQuestionListMatrix
+        questionFigureList, questionTableList, questionTextList, \
+        questionAnswerOrderList, questionAnswerOrderString, questionKeyList = transposedReorderedQuestionListMatrix
 
-    # questionNumberList = transposedReorderedQuestionListMatrix[0]
-    # questionCodeList = transposedReorderedQuestionListMatrix[1]
-    # questionTypeList = transposedReorderedQuestionListMatrix[2]
-    # questionVersionNumberList = transposedReorderedQuestionListMatrix[3]
-    # questionFigureList = transposedReorderedQuestionListMatrix[4]
-    # questionTableList = transposedReorderedQuestionListMatrix[5]
-    # questionAnswerOrderList = transposedReorderedQuestionListMatrix[6]
-    # questionAnswerOrderString = transposedReorderedQuestionListMatrix[7]
-    # questionKeyList = transposedReorderedQuestionListMatrix[8]
-
-
-    # for version 0 adds the beginning to all the relevant output files
-
+    # for version 0 it adds the beginning to all the relevant output files
     if vNumber == 0:
         qNumberFile.write ( "Ordine delle domande \n versione \t" )
         qCodeFile.write ( "Lista delle domande \n versione \t" )
