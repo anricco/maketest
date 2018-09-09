@@ -18,3 +18,5 @@ givenanswers:	example1-givenanswers.csv
 
 SUBSTITUTIONS
 substitution1:	example1-substitutions.csv
+
+img-dim:	10cm

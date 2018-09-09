@@ -232,14 +232,15 @@ def makeFigure(questionCode, figureNumber):
     if projectType == "BES":
         figureString = r'\noindent\begin{minipage}{\columnwidth}' + "\n"
         figureString = figureString + "\t" + r'\begin{center}' + "\n"
-        figureString = figureString + "\t" + r'\includegraphics[width=7cm]{q' + questionCode + r'-fig.pdf}' +  "\n\n"
+        figureString = figureString + "\t" + r'\includegraphics[width=7cm]{q' + questionCode + r'-fig.pdf}' +  "\n\n" #[width=4.4cm]
         figureString = figureString + "\t" + r'Figura ' + `figureNumber` +  "\n"
         figureString = figureString + "\t" + r'\end{center}' + "\n"
         figureString = figureString + r'\end{minipage}' + "\n\n\n" +r'\vspace{1cm}'
     else:
         figureString = r'\noindent\begin{minipage}{\columnwidth}' + "\n"
         figureString = figureString + "\t" + r'\begin{center}' + "\n"
-        figureString = figureString + "\t" + r'\includegraphics[width=7cm]{q' + questionCode + r'-fig.pdf}' +  "\n\n"  #[width=4.4cm]
+        figureString = figureString + "\t" + r'\includegraphics[width=' + figureDimension
+        figureString = figureString + r']{q' + questionCode + r'-fig.pdf}' +  "\n\n"
         figureString = figureString + "\t" + r'Figura ' + `figureNumber` +  "\n"
         figureString = figureString + "\t" + r'\end{center}' + "\n"
         figureString = figureString + r'\end{minipage}' + "\n\n\n"
@@ -340,7 +341,7 @@ def makeLatexFile(latexOutputFileName, vNumber, transposedReorderedQuestionListM
                              ["@TEXTS@", allTextString]]
     latexOutputFileString = replaceTag(latexInputFileName, mainpath + "/input/", replacementListMatrix)
 
-    # print latexOutputFileString
+    print latexOutputFileString
 
     latexOutputFile = open( mainpath + "/output/latex/" + latexOutputFileName, 'w' )
     latexOutputFile.write(latexOutputFileString)    #.decode('latin1')
@@ -473,6 +474,10 @@ def readProject(projectFileName):
     qAnswerOrderFile = open( mainpath + "/output/" + qAnswerOrderFileName, 'w' )
     qKeyFile = open( mainpath + "/output/" + qKeyFileName, 'w' )
 
+    # dimension of the figures inside the latex text
+    global figureDimension
+    figureDimension = projectMatrix[21][1]
+    print figureDimension
 
     # using csvFileToMatrix(csvFileName, csvFilePath) to read the list of the questions from file and make a matrix
     global questionListMatrix
