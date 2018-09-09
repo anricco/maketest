@@ -341,7 +341,7 @@ def makeLatexFile(latexOutputFileName, vNumber, transposedReorderedQuestionListM
                              ["@TEXTS@", allTextString]]
     latexOutputFileString = replaceTag(latexInputFileName, mainpath + "/input/", replacementListMatrix)
 
-    print latexOutputFileString
+    #print latexOutputFileString
 
     latexOutputFile = open( mainpath + "/output/latex/" + latexOutputFileName, 'w' )
     latexOutputFile.write(latexOutputFileString)    #.decode('latin1')
