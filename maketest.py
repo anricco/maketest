@@ -477,7 +477,7 @@ def readProject(projectFileName):
     # dimension of the figures inside the latex text
     global figureDimension
     figureDimension = projectMatrix[21][1]
-    print figureDimension
+    # print figureDimension
 
     # using csvFileToMatrix(csvFileName, csvFilePath) to read the list of the questions from file and make a matrix
     global questionListMatrix
