@@ -60,8 +60,8 @@ def matrixToCsvFile(inputMatrix, csvFileName, csvFilePath):
 
     for j in range(0, len(inputMatrix)):
         for k in range(0, len(inputMatrix[j])-1):
-            outputCsvFile.write ( inputMatrix[j][k] + "\t" )
-        outputCsvFile.write ( inputMatrix[j][len(inputMatrix[j])-1] + "\n" )
+            outputCsvFile.write ( str(inputMatrix[j][k]) + "\t" )
+        outputCsvFile.write ( str(inputMatrix[j][len(inputMatrix[j])-1]) + "\n" )
 
     outputCsvFile.close()
 
