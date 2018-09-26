@@ -419,8 +419,8 @@ def makeLatexFolder():
     if not os.path.exists(mainpath + "/output/latex/"):
         os.makedirs(mainpath + "/output/latex/")
 
-    # copying the figures and eventually other files in the /output/latex directory
-    # TO ADD: option to copy other files, like other figures
+    # copying the figures and other files in the /output/latex directory
+    # NOTICE: option to copy other files, like other figures, from folder copyFolderName
     # shutil.copyfile( mainpath + "/input/buon-compito.pdf",
     #                          mainpath + "/output/latex/buon-compito.pdf")
     for j in range(0,questionNumber):
@@ -428,6 +428,17 @@ def makeLatexFolder():
             #print j+1
             shutil.copyfile( mainpath + "/input/" + questionFolderName + "/" + "q" + questionListMatrix[j][1] + "-fig.pdf" ,
                              mainpath + "/output/latex/" + "q" + questionListMatrix[j][1] + "-fig.pdf")
+
+    if not os.path.exists(mainpath + "/input/" + copyFolderName + "/"):
+        print "Error: missing copy folder."
+    elif not copyFolderName == "":
+        sourceFiles = os.listdir(mainpath + "/input/" + copyFolderName + "/")
+        # print sourceFiles
+        for fileName in sourceFiles:
+            fullFileName = os.path.join(mainpath + "/input/" + copyFolderName + "/", fileName)
+            # print fullFileName
+            if (os.path.isfile(fullFileName)):
+                shutil.copy(fullFileName, mainpath + "/output/latex/")
 
         #shutil.copyfile(src, dst)
         #newQuestionString = makeQuestion(questionCodeList[j], int(questionTypeList[j]), questionAnswerOrderList[j])
@@ -478,6 +489,11 @@ def readProject(projectFileName):
     global figureDimension
     figureDimension = projectMatrix[21][1]
     # print figureDimension
+
+    # the full content of the folder will be copied to the latex folder
+    global copyFolderName
+    copyFolderName = projectMatrix[23][1]
+    # print copyFolderName
 
     # using csvFileToMatrix(csvFileName, csvFilePath) to read the list of the questions from file and make a matrix
     global questionListMatrix
