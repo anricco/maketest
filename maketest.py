@@ -26,6 +26,12 @@ import random
 from pdfrw import PdfReader, PdfWriter
 
 
+
+# from localfunctions import *
+
+from localfunctions import csvFileToMatrix # readProject
+
+
 #import logging
 #logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 #logging.debug('This is a log message.')
@@ -35,20 +41,6 @@ def removeExtension(fileName):
     base=os.path.basename(fileName) # only filename without path
     removedExtensionFile = os.path.splitext(base)[0] # extension =  os.path.splitext(base)[1]
     return removedExtensionFile
-
-
-
-# csvFileToMatrix opens a .csv file with tab as separator and converts it in a matrix list
-def csvFileToMatrix(csvFileName, csvFilePath):
-    outputMatrix = []
-
-    for line in fileinput.input( csvFilePath + "/" + csvFileName ):
-        outputMatrixLine = []
-        for k in range(0,line.count("\t")+1):
-            outputMatrixLine.append(line.split("\t")[k].rstrip())  # rstrip() removes \n, \r, etc.
-        outputMatrix.append(outputMatrixLine)
-
-    return outputMatrix
 
 
 
@@ -444,11 +436,12 @@ def makeLatexFolder():
         #newQuestionString = makeQuestion(questionCodeList[j], int(questionTypeList[j]), questionAnswerOrderList[j])
         #allQuestionString = allQuestionString + newQuestionString    #encode('latin1')
 
-
-
 # it defines all the global variables associated to the project,
 # such as projectMatrix, projectName, projectType, versionNumber, etc.
 def readProject(projectFileName):
+
+    global mainpath
+    mainpath = os.getcwd()
 
         #### LIST OF CONSTANTS ####
 
@@ -507,10 +500,8 @@ def readProject(projectFileName):
     #### END LIST OF CONSTANTS ####
 
 
-def main():
 
-    global mainpath
-    mainpath = os.getcwd()
+def main():
 
         #### COMMAND LINE OPTIONS ####
     parser = argparse.ArgumentParser()
